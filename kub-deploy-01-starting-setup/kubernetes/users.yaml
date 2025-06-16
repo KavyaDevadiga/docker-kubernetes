@@ -63,7 +63,7 @@ spec:
           image: kavyacd/kub-dep-users:latest
           env:
             - name: MONGODB_CONNECTION_URI
-              value: "mongodb+srv://kavya:1234@cluster0.5kupto4.mongodb.net/?retryWrites=true&w=majority&appName=Cluster0"
+              value: "mongodb://mongo:27017"
             - name: AUTH_API_ADDRESSS
               value: "auth-service.default:3000"
           volumeMounts:
