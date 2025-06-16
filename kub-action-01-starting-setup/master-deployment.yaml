@@ -1,0 +1,50 @@
+apiVersion: v1
+kind: Service
+metadata:
+  name: backend
+  labels:
+    group: example
+spec:
+  selector:
+    app: second-app
+  ports:
+    - protocol: TCP
+      port: 80
+      targetPort: 8080
+    # - protocol: TCP
+    #   port: 443
+    #   targetPort: 8443
+  type: LoadBalancer
+
+---
+apiVersion: apps/v1
+kind: Deployment #Service job
+metadata:
+  name: second-app-deployment
+  labels:
+    group: example
+spec:
+  replicas: 1
+  selector:
+    # matchLabels:
+    #   app: second-app
+    matchExpressions:
+      - { key: app, operator: In, values: ["second-app", "first-app"] }
+  template:
+    metadata:
+      labels:
+        app: second-app
+    spec:
+      containers:
+        - name: second-node
+          image: kavyacd/kub-first-app
+          imagePullPolicy: Always
+          #health check
+          livenessProbe:
+            httpGet:
+              path: /
+              port: 8080
+            initialDelaySeconds: 5
+            periodSecods: 10
+        #- name: second-node
+        #  image: kavyacd/kub-first-app:2

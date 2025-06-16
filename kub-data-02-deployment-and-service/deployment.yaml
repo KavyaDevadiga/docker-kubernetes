@@ -1,0 +1,35 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: story-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: story
+  template:
+    metadata:
+      labels:
+        app: story
+    spec:
+      containers:
+        - name: story
+          image: kavyacd/kub-volume:1
+          volumeMounts:
+            - mountPath: /app/story # container file which should be mounted
+              name: story-volume
+      volumes:
+        - name: story-volume
+          # emptyDir: {} # emptyDir is created inside pod hence it would not be helpful in case of multiple pods
+          # hostPath:
+          #   path: /data
+          #   type: DirectoryOrCreate #DirectoryOrCreate specifies that /data should be directory and should be created if it doesn't exist. You can specify only Directory, but then it won't be automatically created
+          #   # if we have multiple nodes then all nodes will have separate /data directory
+          persistentVolumeClaim:
+            claimName: host-pvc
+      # env:
+      #   - name: NODE_ENV
+      #     value: production # defining environment variable in the deployment file
+      envFrom: # define the environment variables from configMap
+        - configMapRef:
+            name: my-env

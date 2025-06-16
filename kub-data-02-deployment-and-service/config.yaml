@@ -1,0 +1,7 @@
+apiVersion: v1
+kind: ConfigMap
+metadata:
+  name: my-env # To be referenced in deployment
+  namespace: default
+data:
+  NODE_ENV: production

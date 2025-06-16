@@ -1,0 +1,17 @@
+apiVersion: apps/v1
+kind: Deployment
+metadata:
+  name: volume-app-deployment
+spec:
+  replicas: 1
+  selector:
+    matchLabels:
+      app: volume-app
+  template:
+    metadata:
+      labels:
+        app: volume-app
+    spec:
+      containers:
+        - name: volume-node
+          image: kavyacd/kub-volume
